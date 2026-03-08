@@ -1,27 +1,47 @@
-BiteSpeed Identity Reconciliation
+# BiteSpeed Identity Reconciliation
+
 A full-stack web application that identifies and reconciles customer contact information across multiple purchases. Built for the BiteSpeed backend task.
 
-Live Demo
+---
 
-Frontend: https://bitespeed-frontend.onrender.com
-Backend API: https://bitespeed-backend.onrender.com
+## Live Demo
 
+- **Frontend:** https://bitespeed-frontend.onrender.com
+- **Backend API:** https://bitespeed-backend.onrender.com
 
-What It Does
-When a customer makes purchases using different email addresses or phone numbers, this service links all their contacts together. It identifies a primary contact and groups all related contacts as secondary contacts under it.
-Example
-PurchaseEmailPhone1stjohn@gmail.com99999999992ndjohn@outlook.com99999999993rdjohn@gmail.com8888888888
+---
+
+## What It Does
+
+When a customer makes purchases using different email addresses or phone numbers, this service links all their contacts together. It identifies a **primary contact** and groups all related contacts as **secondary contacts** under it.
+
+### Example
+
+| Purchase | Email | Phone |
+|---|---|---|
+| 1st | john@gmail.com | 9999999999 |
+| 2nd | john@outlook.com | 9999999999 |
+| 3rd | john@gmail.com | 8888888888 |
+
 All three are linked under one primary contact with secondary contacts tracking the variations.
 
-API Endpoint
-POST /identify
-Request:
-json{
+---
+
+## API Endpoint
+
+### `POST /identify`
+
+**Request:**
+```json
+{
   "email": "john@gmail.com",
   "phoneNumber": "9999999999"
 }
-Response:
-json{
+```
+
+**Response:**
+```json
+{
   "contact": {
     "primaryContactId": 1,
     "emails": ["john@gmail.com", "john@outlook.com"],
@@ -29,22 +49,27 @@ json{
     "secondaryContactIds": [2, 3]
   }
 }
+```
 
-Tech Stack
-Backend
+---
 
-Runtime: Node.js with TypeScript
-Framework: Express.js
-Database: MySQL (hosted on Aiven Cloud)
-Libraries: mysql2, cors, dotenv
+## Tech Stack
 
-Frontend
+### Backend
+- **Runtime:** Node.js with TypeScript
+- **Framework:** Express.js
+- **Database:** MySQL (hosted on Aiven Cloud)
+- **Libraries:** `mysql2`, `cors`, `dotenv`
 
-Framework: React with TypeScript
-Build Tool: react-scripts (Create React App)
+### Frontend
+- **Framework:** React with TypeScript
+- **Build Tool:** react-scripts (Create React App)
 
+---
 
-Project Structure
+## Project Structure
+
+```
 bitespeed/
 ├── backend/
 │   ├── src/
@@ -62,18 +87,26 @@ bitespeed/
 │   │   └── favicon.ico
 │   └── package.json
 └── README.md
+```
 
-Local Setup
-Prerequisites
+---
 
-Node.js v18+
-MySQL database (or Aiven account)
+## Local Setup
 
-Backend
-bashcd backend
+### Prerequisites
+- Node.js v18+
+- MySQL database (or Aiven account)
+
+### Backend
+
+```bash
+cd backend
 npm install
-Create backend/.env:
-propertiesPORT=3000
+```
+
+Create `backend/.env`:
+```properties
+PORT=3000
 DB_HOST=your_db_host
 DB_PORT=your_db_port
 DB_USER=your_db_user
@@ -81,21 +114,45 @@ DB_PASSWORD=your_db_password
 DB_NAME=defaultdb
 DB_SSL_CA=./ca.pem
 ALLOWED_ORIGINS=http://localhost:3001
-bashnpm run dev       # development with ts-node
+```
+
+```bash
+npm run dev       # development with ts-node
 # or
 npm run build     # compile TypeScript
 npm start         # run compiled JS
-Frontend
-bashcd frontend
-npm install
-Create frontend/.env:
-propertiesREACT_APP_API_URL=http://localhost:3000
-bashnpm start         # runs on port 3001 (if 3000 is taken by backend)
+```
 
-Deployment (Render)
-Backend — Web Service
-SettingValueRoot DirectorybackendBuild Commandnpm install && npm run buildStart Commandnode dist/index.jsInstance TypeFree
-Environment Variables to set in Render dashboard:
+### Frontend
+
+```bash
+cd frontend
+npm install
+```
+
+Create `frontend/.env`:
+```properties
+REACT_APP_API_URL=http://localhost:3000
+```
+
+```bash
+npm start         # runs on port 3001 (if 3000 is taken by backend)
+```
+
+---
+
+## Deployment (Render)
+
+### Backend — Web Service
+| Setting | Value |
+|---|---|
+| Root Directory | `backend` |
+| Build Command | `npm install && npm run build` |
+| Start Command | `node dist/index.js` |
+| Instance Type | Free |
+
+**Environment Variables to set in Render dashboard:**
+```
 PORT=3000
 DB_HOST=...
 DB_PORT=...
@@ -104,14 +161,27 @@ DB_PASSWORD=...
 DB_NAME=defaultdb
 DB_SSL_CA=./ca.pem
 ALLOWED_ORIGINS=https://your-frontend.onrender.com
-Frontend — Static Site
-SettingValueRoot DirectoryfrontendBuild Commandnpm install && npm run buildPublish Directorybuild
-Environment Variables to set in Render dashboard:
+```
+
+### Frontend — Static Site
+| Setting | Value |
+|---|---|
+| Root Directory | `frontend` |
+| Build Command | `npm install && npm run build` |
+| Publish Directory | `build` |
+
+**Environment Variables to set in Render dashboard:**
+```
 REACT_APP_API_URL=https://your-backend.onrender.com
+```
 
-How Contact Linking Works
+---
 
-If no existing contact matches email or phone → create new primary contact
-If one match found → return existing contact details
-If two matches found from different primaries → older one becomes primary, newer one becomes secondary
-All linked contacts are returned together in the response
+## How Contact Linking Works
+
+1. If no existing contact matches email or phone → create new **primary** contact
+2. If one match found → return existing contact details
+3. If two matches found from different primaries → older one becomes **primary**, newer one becomes **secondary**
+4. All linked contacts are returned together in the response
+
+---
